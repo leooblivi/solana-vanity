@@ -4,7 +4,7 @@ Generate a custom Solana wallet address that starts (or ends) with a keyword of 
 
 **Live app:** https://sol-vanity-sage.vercel.app
 
-![Sol Vanity screenshot](./screenshot.png)
+<img width="490" height="846" alt="image" src="https://github.com/user-attachments/assets/6226ac08-b2ef-4224-ae23-7e01bbe695b4" />
 
 ## What this is
 
