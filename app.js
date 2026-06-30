@@ -22,6 +22,30 @@ function base58Encode(bytes) {
   return result;
 }
 
+// ---- DOM refs ----
+const keywordInput = document.getElementById('keyword');
+const keywordError = document.getElementById('keyword-error');
+const positionRow = document.getElementById('position-row');
+const caseSensitiveBox = document.getElementById('case-sensitive');
+const estimateValue = document.getElementById('estimate-value');
+const estimateDetail = document.getElementById('estimate-detail');
+const warningBox = document.getElementById('warning-box');
+const grindBtn = document.getElementById('grind-btn');
+const stopBtn = document.getElementById('stop-btn');
+const progressBox = document.getElementById('progress-box');
+const progressFill = document.getElementById('progress-fill');
+const progressTries = document.getElementById('progress-tries');
+const progressRate = document.getElementById('progress-rate');
+const progressEta = document.getElementById('progress-eta');
+const resultBox = document.getElementById('result-box');
+const resultAddress = document.getElementById('result-address');
+const copyKeyBtn = document.getElementById('copy-key-btn');
+const saveJsonBtn = document.getElementById('save-json-btn');
+const caseNote = document.getElementById('case-note');
+const soundToggle = document.getElementById('sound-toggle');
+const unlockBtn = document.getElementById('unlock-btn');
+const downloadRow = document.getElementById('download-row');
+
 // ---- arcade sound engine (no external audio files — generated with Web Audio) ----
 let audioCtx = null;
 let scanInterval = null;
@@ -83,30 +107,6 @@ soundToggle.addEventListener('click', () => {
   updateSoundToggleLabel();
   if (!soundOn) stopScanSound();
 });
-
-// ---- DOM refs ----
-const keywordInput = document.getElementById('keyword');
-const keywordError = document.getElementById('keyword-error');
-const positionRow = document.getElementById('position-row');
-const caseSensitiveBox = document.getElementById('case-sensitive');
-const estimateValue = document.getElementById('estimate-value');
-const estimateDetail = document.getElementById('estimate-detail');
-const warningBox = document.getElementById('warning-box');
-const grindBtn = document.getElementById('grind-btn');
-const stopBtn = document.getElementById('stop-btn');
-const progressBox = document.getElementById('progress-box');
-const progressFill = document.getElementById('progress-fill');
-const progressTries = document.getElementById('progress-tries');
-const progressRate = document.getElementById('progress-rate');
-const progressEta = document.getElementById('progress-eta');
-const resultBox = document.getElementById('result-box');
-const resultAddress = document.getElementById('result-address');
-const copyKeyBtn = document.getElementById('copy-key-btn');
-const saveJsonBtn = document.getElementById('save-json-btn');
-const caseNote = document.getElementById('case-note');
-const soundToggle = document.getElementById('sound-toggle');
-const unlockBtn = document.getElementById('unlock-btn');
-const downloadRow = document.getElementById('download-row');
 
 // base58 chars Solana addresses can contain — used to reject invalid input
 const VALID_CHARS = new Set(B58_ALPHABET.split(''));
