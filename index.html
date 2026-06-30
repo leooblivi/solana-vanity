@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Sol Vanity — generate a custom Solana address</title>
+<link rel="icon" type="image/png" href="logo.png" />
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css" />
 </head>
@@ -11,6 +12,7 @@
 
 <div class="screen">
   <header class="title">
+    <img src="logo.png" alt="Sol Vanity logo" class="logo" />
     <h1>SOL VANITY</h1>
     <p class="subtitle">generate a solana address with your own keyword</p>
   </header>
@@ -18,7 +20,7 @@
   <main class="panel">
 
     <label class="field-label" for="keyword">KEYWORD (UP TO 4 CHARS)</label>
-    <input id="keyword" class="pixel-input" type="text" maxlength="4" placeholder="leo" autocomplete="off" spellcheck="false" />
+    <input id="keyword" class="pixel-input" type="text" maxlength="4" placeholder="sunny" autocomplete="off" spellcheck="false" />
     <p id="keyword-error" class="error-text" hidden></p>
 
     <div class="field-label">MATCH POSITION</div>
@@ -28,10 +30,14 @@
       <button class="pos-btn" data-pos="anywhere">ANY</button>
     </div>
 
-    <label class="checkbox-row">
-      <input type="checkbox" id="case-sensitive" />
-      <span>case sensitive match</span>
-    </label>
+    <div class="row-split">
+      <label class="checkbox-row">
+        <input type="checkbox" id="case-sensitive" checked />
+        <span>case sensitive match</span>
+      </label>
+      <button id="sound-toggle" class="sound-toggle" aria-label="toggle sound">SOUND: ON</button>
+    </div>
+    <p class="case-note" id="case-note"></p>
 
     <div class="estimate-box" id="estimate-box">
       <div class="box-label">ESTIMATED TIME</div>
@@ -42,9 +48,12 @@
     <div class="warning-box" id="warning-box">
       <div class="box-label">/!\ WANT 5-7 CHARS?</div>
       <div class="warning-detail">
-        The web version is capped at 4 characters to keep things quick in the browser. For longer keywords, the desktop app runs native and finds them much faster.
+        The web version is capped at 4 characters to keep things quick in the browser. The desktop app runs native and finds longer keywords much faster.
       </div>
-      <div class="download-row">
+
+      <button id="unlock-btn" class="unlock-btn">QUOTE THIS AND GET THE FREE APP</button>
+
+      <div class="download-row" id="download-row" hidden>
         <a href="#" class="download-btn" id="download-windows">
           <span class="download-os">WINDOWS</span>
           <span class="download-sub">.exe — coming soon</span>
@@ -60,6 +69,7 @@
     <button id="stop-btn" class="grind-btn stop-btn" hidden>STOP</button>
 
     <div class="progress-box" id="progress-box" hidden>
+      <p class="closing-warning">/!\ don't close this tab — closing it stops the search and any progress is lost.</p>
       <div class="progress-head">
         <span>SCANNING...</span>
         <span id="progress-eta">ETA —</span>

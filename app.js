@@ -22,6 +22,68 @@ function base58Encode(bytes) {
   return result;
 }
 
+// ---- arcade sound engine (no external audio files — generated with Web Audio) ----
+let audioCtx = null;
+let scanInterval = null;
+let soundOn = localStorage.getItem('sol-vanity-sound') !== 'off';
+
+function getAudioCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+
+function beep(freq, duration, type = 'square', volume = 0.05, delay = 0) {
+  if (!soundOn) return;
+  const ctx = getAudioCtx();
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = type;
+  osc.frequency.value = freq;
+  gain.gain.value = volume;
+  osc.connect(gain).connect(ctx.destination);
+  const start = ctx.currentTime + delay;
+  osc.start(start);
+  gain.gain.setValueAtTime(volume, start);
+  gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+  osc.stop(start + duration);
+}
+
+function startScanSound() {
+  if (scanInterval) return;
+  let step = 0;
+  const notes = [220, 277, 330, 277];
+  scanInterval = setInterval(() => {
+    beep(notes[step % notes.length], 0.08, 'square', 0.035);
+    step++;
+  }, 220);
+}
+
+function stopScanSound() {
+  if (scanInterval) {
+    clearInterval(scanInterval);
+    scanInterval = null;
+  }
+}
+
+function playFoundFanfare() {
+  beep(523, 0.1, 'square', 0.06, 0);
+  beep(659, 0.1, 'square', 0.06, 0.1);
+  beep(784, 0.1, 'square', 0.06, 0.2);
+  beep(1047, 0.22, 'square', 0.07, 0.32);
+}
+
+function updateSoundToggleLabel() {
+  soundToggle.textContent = soundOn ? 'SOUND: ON' : 'SOUND: OFF';
+}
+updateSoundToggleLabel();
+
+soundToggle.addEventListener('click', () => {
+  soundOn = !soundOn;
+  localStorage.setItem('sol-vanity-sound', soundOn ? 'on' : 'off');
+  updateSoundToggleLabel();
+  if (!soundOn) stopScanSound();
+});
+
 // ---- DOM refs ----
 const keywordInput = document.getElementById('keyword');
 const keywordError = document.getElementById('keyword-error');
@@ -41,6 +103,10 @@ const resultBox = document.getElementById('result-box');
 const resultAddress = document.getElementById('result-address');
 const copyKeyBtn = document.getElementById('copy-key-btn');
 const saveJsonBtn = document.getElementById('save-json-btn');
+const caseNote = document.getElementById('case-note');
+const soundToggle = document.getElementById('sound-toggle');
+const unlockBtn = document.getElementById('unlock-btn');
+const downloadRow = document.getElementById('download-row');
 
 // base58 chars Solana addresses can contain — used to reject invalid input
 const VALID_CHARS = new Set(B58_ALPHABET.split(''));
@@ -111,7 +177,19 @@ positionRow.addEventListener('click', (e) => {
   updateEstimate();
 });
 
-caseSensitiveBox.addEventListener('change', updateEstimate);
+caseSensitiveBox.addEventListener('change', () => {
+  updateCaseNote();
+  updateEstimate();
+});
+
+function updateCaseNote() {
+  if (caseSensitiveBox.checked) {
+    caseNote.textContent = 'Solana addresses are case-sensitive — "Leo" and "leo" are different patterns. With this on, the result will match the exact uppercase/lowercase you typed.';
+  } else {
+    caseNote.textContent = 'Case ignored while searching (faster), so the match may come back as "Leo", "LEO", or "leo" — any casing of what you typed.';
+  }
+}
+updateCaseNote();
 
 // We deliberately overestimate rather than underestimate — better to
 // surprise someone with "that was faster than I thought" than the reverse.
@@ -133,11 +211,10 @@ function expectedTries(n, pos, caseSensitive) {
 }
 
 function formatDuration(seconds) {
-  if (seconds < 1) return '< 1 sec';
-  if (seconds < 60) return `~${Math.round(seconds)} sec`;
-  if (seconds < 3600) return `~${Math.round(seconds / 60)} min`;
-  if (seconds < 86400) return `~${(seconds / 3600).toFixed(1)} hr`;
-  return `~${(seconds / 86400).toFixed(1)} days`;
+  if (seconds < 60) return `> ${Math.max(1, Math.round(seconds))} sec`;
+  if (seconds < 3600) return `> ${Math.round(seconds / 60)} min`;
+  if (seconds < 86400) return `> ${(seconds / 3600).toFixed(1)} hr`;
+  return `> ${(seconds / 86400).toFixed(1)} days`;
 }
 
 function formatNumber(n) {
@@ -191,6 +268,7 @@ function startGrind() {
   progressEta.textContent = 'ETA —';
 
   window.addEventListener('beforeunload', beforeUnloadHandler);
+  startScanSound();
 
   const caseSensitive = caseSensitiveBox.checked;
   const workerCount = Math.max(1, Math.min(cores, 8));
@@ -240,6 +318,7 @@ function renderProgress(keyword, caseSensitive) {
 
 function stopGrind(userInitiated) {
   grinding = false;
+  stopScanSound();
   workers.forEach((w) => {
     w.postMessage({ type: 'stop' });
     w.terminate();
@@ -256,6 +335,7 @@ function onFound(address, secretKeyArray) {
   foundResult = { address, secretKeyArray };
   stopGrind(false);
   progressBox.hidden = true;
+  playFoundFanfare();
 
   const keyword = keywordInput.value.trim();
   resultAddress.innerHTML = highlightMatch(address, keyword, position, caseSensitiveBox.checked);
@@ -321,4 +401,13 @@ document.getElementById('download-windows').addEventListener('click', (e) => {
 document.getElementById('download-mac').addEventListener('click', (e) => {
   e.preventDefault();
   alert('macOS app is coming soon — check back shortly!');
+});
+
+unlockBtn.addEventListener('click', () => {
+  const tweetText = 'just generated a custom Solana vanity address with Sol Vanity — type a keyword, it grinds your wallet right in the browser. zero servers, the key never leaves your device. try it: https://sol-vanity-sage.vercel.app';
+  const intentUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
+  window.open(intentUrl, '_blank', 'noopener,noreferrer');
+  downloadRow.hidden = false;
+  unlockBtn.textContent = 'THANKS — APP UNLOCKED BELOW';
+  unlockBtn.disabled = true;
 });

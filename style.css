@@ -31,6 +31,14 @@ body {
 
 .title { text-align: center; margin-bottom: 18px; }
 
+.logo {
+  width: 64px;
+  height: 64px;
+  border: 2.5px solid var(--ink);
+  margin-bottom: 10px;
+  image-rendering: pixelated;
+}
+
 .title h1 {
   font-size: 18px;
   letter-spacing: 2px;
@@ -67,7 +75,6 @@ body {
   background: var(--field);
   color: var(--ink);
   margin-bottom: 4px;
-  text-transform: lowercase;
 }
 
 .pixel-input:focus { outline: none; background: #fff; }
@@ -100,6 +107,30 @@ body {
 .pos-btn.active { background: var(--accent-bg); color: var(--accent-ink); }
 .pos-btn:hover { filter: brightness(0.97); }
 
+.row-split {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.row-split .checkbox-row { margin-bottom: 0; }
+
+.sound-toggle {
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+  font-size: 10px;
+  padding: 6px 8px;
+  border: 1.5px solid var(--ink);
+  background: var(--field);
+  color: var(--muted);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.sound-toggle:hover { background: #fff; }
+
 .checkbox-row {
   display: flex;
   align-items: center;
@@ -115,6 +146,15 @@ body {
 .checkbox-row input { width: 16px; height: 16px; cursor: pointer; }
 
 .box-label { font-size: 7.5px; margin-bottom: 6px; }
+
+.case-note {
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin: -8px 0 14px;
+}
 
 .estimate-box {
   border: 2px solid var(--accent-border);
@@ -171,6 +211,18 @@ body {
   border: 1.5px solid var(--ink);
   padding: 10px;
   margin-bottom: 14px;
+}
+
+.closing-warning {
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+  font-size: 10px;
+  color: var(--warning-ink);
+  background: var(--warning-bg);
+  border: 1.5px solid var(--warning-border);
+  padding: 6px 8px;
+  margin: 0 0 10px;
+  line-height: 1.5;
 }
 
 .progress-head {
@@ -334,6 +386,20 @@ body {
   background: var(--field);
   padding: 1px 3px;
 }
+
+.unlock-btn {
+  width: 100%;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  padding: 12px 6px;
+  border: 1.5px solid var(--warning-border);
+  background: var(--panel);
+  color: var(--warning-ink);
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.unlock-btn:hover { background: var(--warning-bg); }
 
 .download-row {
   display: flex;
