@@ -393,7 +393,12 @@ function flashButton(btn, text) {
 }
 
 unlockBtn.addEventListener('click', () => {
-  const tweetText = 'just generated a custom Solana vanity address with Sol Vanity — type a keyword, it grinds your wallet right in the browser. zero servers, the key never leaves your device. try it: https://sol-vanity-sage.vercel.app';
+  const templates = [
+    'just made a Solana address with my name on it. app never sees the key.\nhttps://sunnyleo.vercel.app',
+    'got my own keyword on a Solana address. runs in browser, your key stays yours.\nhttps://sunnyleo.vercel.app',
+    'made a Solana address with my keyword in it. nothing leaves your browser.\nhttps://sunnyleo.vercel.app',
+  ];
+  const tweetText = templates[Math.floor(Math.random() * templates.length)];
   const intentUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
   window.open(intentUrl, '_blank', 'noopener,noreferrer');
   downloadRow.hidden = false;
