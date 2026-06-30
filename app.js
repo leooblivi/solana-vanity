@@ -392,17 +392,6 @@ function flashButton(btn, text) {
   setTimeout(() => (btn.textContent = original), 1500);
 }
 
-// Desktop builds aren't published yet — swap these hrefs for real release
-// URLs (e.g. a GitHub Releases page) once the Windows/macOS app ships.
-document.getElementById('download-windows').addEventListener('click', (e) => {
-  e.preventDefault();
-  alert('Windows app is coming soon — check back shortly!');
-});
-document.getElementById('download-mac').addEventListener('click', (e) => {
-  e.preventDefault();
-  alert('macOS app is coming soon — check back shortly!');
-});
-
 unlockBtn.addEventListener('click', () => {
   const tweetText = 'just generated a custom Solana vanity address with Sol Vanity — type a keyword, it grinds your wallet right in the browser. zero servers, the key never leaves your device. try it: https://sol-vanity-sage.vercel.app';
   const intentUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
