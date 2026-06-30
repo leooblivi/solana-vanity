@@ -2,7 +2,7 @@
 
 Generate a custom Solana wallet address that starts (or ends) with a keyword of your choice — `Leo...`, `fire...`, `1337...` — entirely in your browser.
 
-**Live app:** https://sol-vanity-sage.vercel.app
+**Live app:** https://sol-vanity-sage.vercel.app 
 
 <img width="504" height="887" alt="image" src="https://github.com/user-attachments/assets/504baa4d-9c2d-49d1-b811-fb349d3fd904" />
 
