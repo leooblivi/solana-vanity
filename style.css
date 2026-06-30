@@ -155,7 +155,7 @@ body {
   font-size: 11px;
   color: var(--muted);
   line-height: 1.6;
-  margin: -8px 0 14px;
+  margin: 4px 0 14px;
 }
 
 .estimate-box {
